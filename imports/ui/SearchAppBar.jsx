@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,6 +14,17 @@ import SearchIcon from '@material-ui/icons/Search';
 const styles = theme => ({
   root: {
     width: '100%',
+  },
+  appBar: {
+		zIndex: '1300',
+  },
+  appBarShift: {
+    marginLeft: '240',
+    width: `calc(100% - 240px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   grow: {
     flexGrow: 1,
@@ -71,14 +83,21 @@ const styles = theme => ({
 });
 
 function SearchAppBar(props) {
-  const { classes, title, placeholder } = props;
+  const { classes, title, placeholder, handleDrawerMenu, drawerOpen } = props;
   return (
     <div className={classes.root}>
-      <AppBar>
+      <AppBar className={classNames(classes.appBar, {
+				[classes.appBarShift]: drawerOpen,
+      })}
+      >
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+          {!drawerOpen && <IconButton
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="Open drawer"
+            onClick={handleDrawerMenu}>
             <MenuIcon />
-          </IconButton>
+          </IconButton>}
           <Typography className={classes.title} variant="h6" color="inherit" noWrap>
             {title}
           </Typography>
