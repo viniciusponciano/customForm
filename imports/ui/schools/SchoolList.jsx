@@ -1,30 +1,45 @@
 import React, { Component } from 'react';
 import { compose } from 'react-komposer';
-import { CircularProgress } from '@material-ui/core';
-import Forms from '/imports/api/forms/forms';
-import Schools from '/imports/api/schools/schools'
+import {
+	CircularProgress,
+	Collapse,
+	List,
+	ListItem,
+	ListItemIcon,
+	ListItemSecondaryAction,
+	ListItemText,
+	Typography,
+} from '@material-ui/core';
+import { ExpandLess, ExpandMore, Business, Computer } from '@material-ui/icons';
+import Schools from '/imports/api/schools/schools';
 
 class SchoolList extends Component{
 
-	getForms = (school) => {
-		const fields = {
-			schoolid: {
-				required: true,
-				id: 'schoolid',
-				label: 'ID',
-				value: '',
-				margin: 'normal',
-			},
-			schoolName: {
-				type: 'text',
-				required: false,
-				id: 'schoolName',
-				label: 'Name',
-				value: '',
-				margin: 'normal',
-			},
-		};
-		return Forms.getForm(fields, school);
+	state = {};
+
+	onClick = schoolId => this.context.router.history.push(`/edit/${schoolId}`);
+
+	getItem = school => {
+		const address = school.address.html.replace('<br />', ' ');
+		return (<div key={school.schoolid}>
+			<ListItem button dense onClick={() => this.onClick(school.schoolid)}>
+				<ListItemIcon>
+					{school.isVirtualSchool === 'Yes' ? <Computer/> : <Business/>}
+				</ListItemIcon>
+				<ListItemText
+					primary={school.schoolid}
+					secondary={school.schoolName}
+					inset
+				/>
+				<ListItemSecondaryAction onClick={() => this.setState({[school.schoolid]: !this.state[school.schoolid]})}>
+					{this.state[school.schoolid] ? <ExpandLess/> : <ExpandMore/>}
+				</ListItemSecondaryAction>
+			</ListItem>
+			<Collapse in={this.state[school.schoolid]} timeout="auto" unmountOnExit style={{padding: '10px 50px'}}>
+				<Typography variant="body1" gutterBottom>{address}</Typography>
+				<a href={school.url}><Typography variant="body1" gutterBottom>{school.url}</Typography></a>
+			</Collapse>
+		</div>);
 	};
 
 	render () {
@@ -33,10 +48,9 @@ class SchoolList extends Component{
 			return <CircularProgress />
 		}
 		return (
-			<div>
-				Pronto
-				{schools.map(this.getForms)}
-			</div>
+			<List>
+				{schools.map(this.getItem)}
+			</List>
 		);
 	}
 }
