@@ -1,9 +1,31 @@
 import React, { Component } from 'react';
 import { compose } from 'react-komposer';
-import { CircularProgress, Typography } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
+import Forms from '/imports/api/forms/forms';
 import Schools from '/imports/api/schools/schools'
 
 class SchoolList extends Component{
+
+	getForms = (school) => {
+		const fields = {
+			schoolid: {
+				required: true,
+				id: 'schoolid',
+				label: 'ID',
+				value: '',
+				margin: 'normal',
+			},
+			schoolName: {
+				type: 'text',
+				required: false,
+				id: 'schoolName',
+				label: 'Name',
+				value: '',
+				margin: 'normal',
+			},
+		};
+		return Forms.getForm(fields, school);
+	};
 
 	render () {
 		const { schools, show } = this.props;
@@ -13,9 +35,7 @@ class SchoolList extends Component{
 		return (
 			<div>
 				Pronto
-				{schools.map(({ schoolName, schoolid }) => (
-					<Typography variant="paragraph">{schoolid} - {schoolName}</Typography>
-				))}
+				{schools.map(this.getForms)}
 			</div>
 		);
 	}
