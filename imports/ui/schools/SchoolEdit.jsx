@@ -17,7 +17,7 @@ class SchoolEdit extends Component {
 			},
 			schoolName: {
 				type: 'text',
-				required: false,
+				required: true,
 				id: 'schoolName',
 				label: 'Name',
 				value: '',
@@ -29,7 +29,10 @@ class SchoolEdit extends Component {
 
 	render() {
 		const { school } = this.props;
-		return this.getForms(school);
+		return (<div>
+			{this.getForms(school)}
+			{Forms.getActions({ save: Schools.setSchool })}
+		</div>);
 	}
 }
 

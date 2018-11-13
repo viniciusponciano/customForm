@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { compose } from 'react-komposer';
 import {
   CircularProgress,
@@ -12,7 +13,6 @@ import {
 } from '@material-ui/core';
 import { ExpandLess, ExpandMore, Business, Computer } from '@material-ui/icons';
 import Schools from '/imports/api/schools/schools';
-import {withRouter} from "react-router-dom";
 
 class SchoolList extends Component{
 

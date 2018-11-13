@@ -21,6 +21,12 @@ class School {
 		const urlAPI = `https://api.schooldigger.com/v1/schools/${schoolId}`;
 		return Restfull.get(urlAPI, this.params);
 	}
+
+	setSchool(school) {
+		const urlAPI = 'http://localhost:3000/post/school';
+		const params = { data: school };
+		return Restfull.post(urlAPI, params);
+	}
 }
 
 export default new School();
