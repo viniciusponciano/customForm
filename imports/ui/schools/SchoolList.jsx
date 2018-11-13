@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import { compose } from 'react-komposer';
 import {
-	CircularProgress,
-	Collapse,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemSecondaryAction,
-	ListItemText,
-	Typography,
+  CircularProgress,
+  Collapse,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+  Typography, withStyles,
 } from '@material-ui/core';
 import { ExpandLess, ExpandMore, Business, Computer } from '@material-ui/icons';
 import Schools from '/imports/api/schools/schools';
+import {withRouter} from "react-router-dom";
 
 class SchoolList extends Component{
 
 	state = {};
 
-	onClick = schoolId => this.context.router.history.push(`/edit/${schoolId}`);
+	onClick = schoolId => this.props.history.push(`/edit/${schoolId}`);
 
 	getItem = school => {
 		const address = school.address.html.replace('<br />', ' ');
@@ -37,7 +38,9 @@ class SchoolList extends Component{
 			</ListItem>
 			<Collapse in={this.state[school.schoolid]} timeout="auto" unmountOnExit style={{padding: '10px 50px'}}>
 				<Typography variant="body1" gutterBottom>{address}</Typography>
-				<a href={school.url}><Typography variant="body1" gutterBottom>{school.url}</Typography></a>
+				<a href={school.url} title="Go to school detail">
+					<Typography variant="body1" gutterBottom>{school.url}</Typography>
+				</a>
 			</Collapse>
 		</div>);
 	};
@@ -64,4 +67,4 @@ function postDataLoader(props, onData) {
 	})
 }
 
-export default compose(postDataLoader)(SchoolList);
+export default withRouter(compose(postDataLoader)(SchoolList));

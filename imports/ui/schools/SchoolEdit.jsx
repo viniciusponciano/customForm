@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { compose } from 'react-komposer';
 import Forms from '/imports/api/forms/forms';
 import Schools from '/imports/api/schools/schools'
@@ -33,7 +34,7 @@ class SchoolEdit extends Component {
 }
 
 function postDataLoader(props, onData) {
-	Schools.getSchool(props.schoolId).then((res) => {
+	Schools.getSchool(props.match.params.id).then((res) => {
 		if (res && res.data) {
 			const data = { school: res.data };
 			onData(null, data)
@@ -41,4 +42,4 @@ function postDataLoader(props, onData) {
 	})
 }
 
-export default compose(postDataLoader)(SchoolEdit);
+export default withRouter(compose(postDataLoader)(SchoolEdit));

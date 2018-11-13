@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -19,6 +20,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import SchoolList from "./schools/SchoolList";
+import SchoolEdit from "./schools/SchoolEdit";
 
 const drawerWidth = 240;
 
@@ -98,80 +100,83 @@ class App extends React.Component {
 	};
 
 	render() {
-		const { classes, theme } = this.props;
+    const { classes, theme } = this.props;
 
-		return (
-			<div className={classes.root}>
-				<CssBaseline />
-				<AppBar
-					position="fixed"
-					className={classNames(classes.appBar, {
-						[classes.appBarShift]: this.state.open,
-					})}
-				>
-					<Toolbar disableGutters={!this.state.open}>
-						<IconButton
-							color="inherit"
-							aria-label="Open drawer"
-							onClick={this.handleDrawerOpen}
-							className={classNames(classes.menuButton, {
-								[classes.hide]: this.state.open,
-							})}
-						>
-							<MenuIcon />
-						</IconButton>
-						<Typography variant="h6" color="inherit" noWrap>
-							Mini variant drawer
-						</Typography>
-					</Toolbar>
-				</AppBar>
-				<Drawer
-					variant="permanent"
-					className={classNames(classes.drawer, {
-						[classes.drawerOpen]: this.state.open,
-						[classes.drawerClose]: !this.state.open,
-					})}
-					classes={{
-						paper: classNames({
-							[classes.drawerOpen]: this.state.open,
-							[classes.drawerClose]: !this.state.open,
-						}),
-					}}
-					open={this.state.open}
-				>
-					<div className={classes.toolbar}>
-						<IconButton onClick={this.handleDrawerClose}>
-							{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-						</IconButton>
-					</div>
-					<Divider />
-					<List>
-						{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-							<ListItem button key={text}>
-								<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-								<ListItemText primary={text} />
-							</ListItem>
-						))}
-					</List>
-					<Divider />
-					<List>
-						{['All mail', 'Trash', 'Spam'].map((text, index) => (
-							<ListItem button key={text}>
-								<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-								<ListItemText primary={text} />
-							</ListItem>
-						))}
-					</List>
-				</Drawer>
-				<main className={classes.content}>
-					<div className={classes.toolbar} />
+    return (
+      <Router>
+        <div className={classes.root}>
+          <CssBaseline/>
+          <AppBar
+            position="fixed"
+            className={classNames(classes.appBar, {
+              [classes.appBarShift]: this.state.open,
+            })}
+          >
+            <Toolbar disableGutters={!this.state.open}>
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={this.handleDrawerOpen}
+                className={classNames(classes.menuButton, {
+                  [classes.hide]: this.state.open,
+                })}
+              >
+                <MenuIcon/>
+              </IconButton>
+              <Typography variant="h6" color="inherit" noWrap>
+                Mini variant drawer
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            variant="permanent"
+            className={classNames(classes.drawer, {
+              [classes.drawerOpen]: this.state.open,
+              [classes.drawerClose]: !this.state.open,
+            })}
+            classes={{
+              paper: classNames({
+                [classes.drawerOpen]: this.state.open,
+                [classes.drawerClose]: !this.state.open,
+              }),
+            }}
+            open={this.state.open}
+          >
+            <div className={classes.toolbar}>
+              <IconButton onClick={this.handleDrawerClose}>
+                {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+              </IconButton>
+            </div>
+            <Divider/>
+            <List>
+              {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                  <ListItemText primary={text}/>
+                </ListItem>
+              ))}
+            </List>
+            <Divider/>
+            <List>
+              {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                  <ListItemText primary={text}/>
+                </ListItem>
+              ))}
+            </List>
+          </Drawer>
+          <main className={classes.content}>
+            <div className={classes.toolbar}/>
 
-					<SchoolList/>
+            <Route exact path="/" component={SchoolList}/>
+            <Route path="/edit/:id" component={SchoolEdit}/>
 
-				</main>
-			</div>
-		);
-	}
+          </main>
+        </div>
+      </Router>
+    );
+  }
 }
 
 App.propTypes = {
