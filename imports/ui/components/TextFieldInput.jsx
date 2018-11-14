@@ -13,7 +13,7 @@ class TextFieldInput extends Component {
 	};
 
 	onBlur = () => {
-		const { required, errorText, label, form, validate, name } = this.props;
+		const { required, errorText, label, form, validate, name, updateForm } = this.props;
 		const { value } = this.state;
 		let { helperText, error } = this.state;
 		if (required && !value) {
@@ -26,7 +26,7 @@ class TextFieldInput extends Component {
 			validate[name] = true;
 			form[name] = value;
 		}
-		this.setState({ error, helperText })
+		this.setState({ error, helperText }, () => updateForm());
 	};
 
 	onFocus = () => {
@@ -36,7 +36,11 @@ class TextFieldInput extends Component {
 	};
 
 	render() {
-		return (<TextField {...this.props} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} {...this.state} />);
+		const { updatedTimes, updateForm, readOnly, ...props } = this.props;
+		if (readOnly) {
+			return (<TextField {...props} InputProps={{ readOnly: true }} />);
+		}
+		return (<TextField {...props} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} {...this.state} />);
 	}
 }
 

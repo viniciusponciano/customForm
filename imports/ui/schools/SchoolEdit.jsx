@@ -6,26 +6,21 @@ import Schools from '/imports/api/schools/schools'
 
 class SchoolEdit extends Component {
 
+	state = { updatedTimes: 0 };
+
 	getForms = (school) => {
+		const { state: { updatedTimes }, updateForm } = this;
 		const fields = {
-			schoolid: {
-				required: true,
-				id: 'schoolid',
-				label: 'ID',
-				value: '',
-				margin: 'normal',
-			},
-			schoolName: {
-				type: 'text',
-				required: true,
-				id: 'schoolName',
-				label: 'Name',
-				value: '',
-				margin: 'normal',
+			...Schools.getEditFormFields(),
+      render: {
+        updatedTimes,
+				updateForm: updateForm,
 			},
 		};
 		return Forms.getForm(fields, school);
 	};
+
+	updateForm = () => this.setState({ updatedTimes: this.state.updatedTimes++ });
 
 	render() {
 		const { school } = this.props;

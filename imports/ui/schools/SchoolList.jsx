@@ -9,7 +9,7 @@ import {
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
-  Typography, withStyles,
+  Typography,
 } from '@material-ui/core';
 import { ExpandLess, ExpandMore, Business, Computer } from '@material-ui/icons';
 import Schools from '/imports/api/schools/schools';

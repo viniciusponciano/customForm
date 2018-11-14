@@ -4,36 +4,48 @@ import ActionButtons from '/imports/ui/components/ActionButtons';
 
 class Forms {
 	constructor() {
-		this.formDocument = {};
-		this.validateDocument = {};
-	}
+    this.formDocument = {};
+    this.validateDocument = {};
+    this.render = {};
+  }
+
+	filterVersion = fieldKey => fieldKey !== 'render';
 
 	getForm(fields = {}, data = {}) {
-		const formFields = [];
-		Object.keys(fields).forEach((field) => {
-			fields[field].value = data[field];
-			this.formDocument[field] = data[field];
-			this.validateDocument[field] = !fields[field].required || data[field];
-			formFields.push(this.getInput(field, fields[field]));
-		});
-		return formFields;
-	}
+    const formFields = [];
+    this.render = fields.render;
+    Object.keys(fields)
+      .filter(this.filterVersion)
+      .forEach((fieldKey) => {
+        fields[fieldKey].value = data[fieldKey];
+        this.formDocument[fieldKey] = data[fieldKey];
+        this.validateDocument[fieldKey] = !fields[fieldKey].required || data[fieldKey];
+        formFields.push(this.getInput(fieldKey, fields[fieldKey]));
+      });
+    return formFields;
+  }
 
 	getInput(inputName, props) {
 		const inputType = props.type;
+		const inputKey = `${inputType}-${inputName}`;
 		switch (inputType) {
 			case 'text':
-				return <TextFieldInput {...props} form={this.formDocument} validate={this.validateDocument}/>;
+				return (
+				  <TextFieldInput
+            key={inputKey}
+            fullWidth {...props}
+            form={this.formDocument}
+            validate={this.validateDocument}
+            {...this.render}
+          />
+        );
 			default:
-				return <div>
-					<label htmlFor={inputName}>{props.label}</label>
-					<input name={inputName} value={props.value} />
-				</div>
+				return (<TextFieldInput key={inputKey} fullWidth readOnly {...props} />);
 		}
 	}
 
 	getActions(props) {
-		return <ActionButtons {...props} form={this.formDocument} validate={this.validateDocument} />
+		return (<ActionButtons {...props} form={this.formDocument} validate={this.validateDocument} {...this.render} />);
 	}
 }
 
