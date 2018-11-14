@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
 import {
   Drawer,
   AppBar,
@@ -11,10 +10,13 @@ import {
   CssBaseline,
   Typography,
   Divider,
+  Grid,
   IconButton,
   ListItem,
   ListItemIcon,
   ListItemText,
+  withStyles,
+  withWidth,
 } from '@material-ui/core';
 import { Business, ChevronLeft, ChevronRight, Menu } from '@material-ui/icons';
 import SchoolList from "./schools/SchoolList";
@@ -98,71 +100,79 @@ class App extends React.Component {
 	};
 
 	render() {
-    const { classes, theme } = this.props;
-
+    const { classes, theme, width } = this.props;
+    const { open } = this.state;
     return (
       <Router>
-        <div className={classes.root}>
+        <Grid className={classes.root} container spacing={24}>
           <CssBaseline/>
-          <AppBar
-            position="fixed"
-            className={classNames(classes.appBar, {
-              [classes.appBarShift]: this.state.open,
-            })}
-          >
-            <Toolbar disableGutters={!this.state.open}>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
-                className={classNames(classes.menuButton, {
-                  [classes.hide]: this.state.open,
+          <Grid item xs={12}>
+            <AppBar
+              position="fixed"
+              className={classNames(classes.appBar, {
+                [classes.appBarShift]: this.state.open,
+              })}
+            >
+              <Toolbar disableGutters={!this.state.open}>
+                <IconButton
+                  color="inherit"
+                  aria-label="Open drawer"
+                  onClick={this.handleDrawerOpen}
+                  className={classNames(classes.menuButton, {
+                    [classes.hide]: this.state.open,
+                  })}
+                >
+                  <Menu />
+                </IconButton>
+                <Typography variant="h4" color="inherit" noWrap>
+                  Custom Form
+                </Typography>
+              </Toolbar>
+            </AppBar>
+          </Grid>
+          <Grid item xs={open ? 3 : 0} lg={open ? 2 : 1}>
+            {!((width === 'sm' || width === 'md') && !open) &&
+              <Drawer
+                variant="permanent"
+                className={classNames(classes.drawer, {
+                  [classes.drawerOpen]: open,
+                  [classes.drawerClose]: !open,
                 })}
+                classes={{
+                  paper: classNames({
+                    [classes.drawerOpen]: open,
+                    [classes.drawerClose]: !open,
+                  }),
+                }}
+                open={this.state.open}
               >
-                <Menu />
-              </IconButton>
-              <Typography variant="h6" color="inherit" noWrap>
-                Mini variant drawer
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <Drawer
-            variant="permanent"
-            className={classNames(classes.drawer, {
-              [classes.drawerOpen]: this.state.open,
-              [classes.drawerClose]: !this.state.open,
-            })}
-            classes={{
-              paper: classNames({
-                [classes.drawerOpen]: this.state.open,
-                [classes.drawerClose]: !this.state.open,
-              }),
-            }}
-            open={this.state.open}
-          >
-            <div className={classes.toolbar}>
-              <IconButton onClick={this.handleDrawerClose}>
-                {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
-              </IconButton>
-            </div>
-            <Divider/>
-            <List>
-              <Link to="/">
-                <ListItem button key="schoolsOfCA">
-                  <ListItemIcon><Business /></ListItemIcon>
-                  <ListItemText primary="Schools of California"/>
-                </ListItem>
-              </Link>
-            </List>
-          </Drawer>
-          <main className={classes.content}>
-            <div className={classes.toolbar}/>
+                <div className={classes.toolbar}>
+                  <IconButton onClick={this.handleDrawerClose}>
+                    {theme.direction === 'rtl' ? <ChevronRight/> : <ChevronLeft/>}
+                  </IconButton>
+                </div>
+                <Divider/>
+                <List>
+                  <Link to="/">
+                    <ListItem button key="schoolsOfCA">
+                      <ListItemIcon><Business/></ListItemIcon>
+                      <ListItemText primary="Schools of California"/>
+                    </ListItem>
+                  </Link>
+                </List>
+              </Drawer>
+            }
+          </Grid>
+          <Grid item xs={open ? 9 : 12} lg={open ? 10 : 11}>
+            <main className={classes.content}>
+              <div className={classes.toolbar}/>
 
-            <Route exact path="/" component={SchoolList}/>
-            <Route path="/edit/:id" component={SchoolEdit}/>
+              <Route exact path="/" component={SchoolList}/>
+              <Route path="/edit/:id" component={SchoolEdit}/>
 
-          </main>
-        </div>
+            </main>
+          </Grid>
+        </Grid>
       </Router>
     );
   }
@@ -173,4 +183,4 @@ App.propTypes = {
 	theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(App);
+export default withWidth()(withStyles(styles, { withTheme: true })(App));
