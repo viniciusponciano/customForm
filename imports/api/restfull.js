@@ -1,3 +1,6 @@
+import { HTTP } from 'meteor/http';
+import { WebApp } from 'meteor/webapp';
+
 export default class Restfull {
 
 	static get(url, params = {}) {
@@ -14,10 +17,10 @@ export default class Restfull {
 		});
 	}
 
-	static post(url, params = {}) {
-		console.log(params);
+	static post(url, data = {}) {
+		console.log(data);
 		return new Promise((resolve, reject) => {
-			HTTP.call('POST', url, { params }, (err, res) => {
+			HTTP.call('POST', url, { data, content: data, query: data, params: data, body: { data } }, (err, res) => {
 				if (err || !res) {
 					console.log(err);
 					reject(err);
@@ -27,4 +30,17 @@ export default class Restfull {
 			});
 		});
 	}
+
+	static listener(url, executer) {
+    WebApp.connectHandlers.use(url, (req, res, next) => {
+    	const retorno = executer(req, res);
+    	if (retorno) {
+        res.writeHead(200);
+        res.end('Saved!');
+      } else {
+        res.writeHead(500);
+        res.end('error!')
+      }
+    });
+  }
 }

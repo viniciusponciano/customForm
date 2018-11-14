@@ -13,10 +13,23 @@ class ActionButtons extends Component {
 		this.props.history.goBack();
 	};
 
+	onSave = () => {
+		const { save, form } = this.props;
+		save(form).then(this.afterSave);
+	};
+
+	afterSave = (res) => {
+		const { afterSave } = this.props;
+		if (afterSave) {
+			return afterSave;
+		}
+		return this.onCancel;
+	};
+
 	render() {
-		const { save, cancel } = this.props;
+		const { cancel } = this.props;
 		return (<div>
-			<Button variant="contained" color="primary" onClick={save} disabled={!this.valid()}>
+			<Button variant="contained" color="primary" onClick={this.onSave} disabled={!this.valid()}>
         Save
       </Button>
 			<Button color="secondary" onClick={cancel || this.onCancel}>

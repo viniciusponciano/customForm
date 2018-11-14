@@ -33,6 +33,7 @@ class Forms {
 				return (
 				  <TextFieldInput
             key={inputKey}
+            name={inputName}
             fullWidth {...props}
             form={this.formDocument}
             validate={this.validateDocument}
@@ -40,7 +41,7 @@ class Forms {
           />
         );
 			default:
-				return (<TextFieldInput key={inputKey} fullWidth readOnly {...props} />);
+				return (<TextFieldInput key={inputKey} name={inputName} fullWidth readOnly {...props} />);
 		}
 	}
 

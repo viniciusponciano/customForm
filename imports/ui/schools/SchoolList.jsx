@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { ExpandLess, ExpandMore, Business, Computer } from '@material-ui/icons';
-import Schools from '/imports/api/schools/schools';
+import SchoolsController from '/imports/api/schools/controller';
 
 class SchoolList extends Component{
 
@@ -59,7 +59,7 @@ class SchoolList extends Component{
 }
 
 function postDataLoader(props, onData) {
-	Schools.getAllDistrictSchools('CA').then((res) => {
+	SchoolsController.getAllDistrictSchools('CA').then((res) => {
 		if (res && res.data) {
 			const data = { schools: res.data.schoolList, show: true };
 			onData(null, data)

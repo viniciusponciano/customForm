@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'react-komposer';
 import Forms from '/imports/api/forms/forms';
-import Schools from '/imports/api/schools/schools'
+import SchoolsController from '/imports/api/schools/controller'
 
 class SchoolEdit extends Component {
 
@@ -11,7 +11,7 @@ class SchoolEdit extends Component {
 	getForms = (school) => {
 		const { state: { updatedTimes }, updateForm } = this;
 		const fields = {
-			...Schools.getEditFormFields(),
+			...SchoolsController.getEditFormFields(),
       render: {
         updatedTimes,
 				updateForm: updateForm,
@@ -26,13 +26,13 @@ class SchoolEdit extends Component {
 		const { school } = this.props;
 		return (<div>
 			{this.getForms(school)}
-			{Forms.getActions({ save: Schools.setSchool })}
+			{Forms.getActions({ save: SchoolsController.setSchool })}
 		</div>);
 	}
 }
 
 function postDataLoader(props, onData) {
-	Schools.getSchool(props.match.params.id).then((res) => {
+	SchoolsController.getSchool(props.match.params.id).then((res) => {
 		if (res && res.data) {
 			const data = { school: res.data };
 			onData(null, data)

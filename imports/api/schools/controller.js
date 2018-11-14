@@ -57,10 +57,9 @@ class School {
 		return Restfull.get(urlAPI, this.params);
 	}
 
-	setSchool(school) {
-		const urlAPI = 'http://localhost:3000/post/school';
-		const params = { data: school };
-		return Restfull.post(urlAPI, params);
+	setSchool(data) {
+		const urlAPI = 'http://localhost:3000/edit/school';
+		return Restfull.post(urlAPI, data);
 	}
 }
 
